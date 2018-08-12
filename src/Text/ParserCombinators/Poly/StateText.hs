@@ -22,12 +22,15 @@ module Text.ParserCombinators.Poly.StateText
   , module Control.Applicative
   ) where
 
+import Prelude hiding (fail)
+import qualified Prelude as P
 
 import Text.ParserCombinators.Poly.Base
 import Text.ParserCombinators.Poly.Result
 import qualified Data.Text.Lazy as T
 import Data.Text.Lazy (Text)
 import Control.Applicative
+import Control.Monad.Fail
 
 -- | This @Parser@ datatype is a specialised parsing monad with error
 --   reporting.  Whereas the standard version can be used for arbitrary
@@ -51,6 +54,9 @@ instance Monad (Parser s) where
         continue (Success (ts,s) x)         = let (P g') = g x in g' s ts
         continue (Committed r)              = Committed (continue r)
         continue (Failure ts e)             = Failure ts e
+
+instance MonadFail (Parser s) where
+  fail e = P (\s ts-> Failure (ts,s) e)
 
 instance Commitment (Parser s) where
     commit (P p)         = P (\s-> Committed . squash . p s)

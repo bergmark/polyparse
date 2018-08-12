@@ -17,12 +17,15 @@ module Text.ParserCombinators.Poly.ByteStringChar
   , module Text.ParserCombinators.Poly.Base
   ) where
 
+import Prelude hiding (fail)
+import qualified Prelude as P (fail)
 
 import Text.ParserCombinators.Poly.Base
 import Text.ParserCombinators.Poly.Result
 import qualified Data.ByteString.Lazy.Char8 as BS
 import Data.ByteString.Lazy.Char8 (ByteString)
 import Control.Applicative
+import Control.Monad.Fail
 
 -- | This @Parser@ datatype is a specialised parsing monad with error
 --   reporting.  Whereas the standard version can be used for arbitrary
@@ -44,6 +47,9 @@ instance Monad Parser where
         continue (Success ts x)             = let (P g') = g x in g' ts
         continue (Committed r)              = Committed (continue r)
         continue (Failure ts e)             = Failure ts e
+
+instance MonadFail Parser where
+    fail e       = P (\ts-> Failure ts e)
 
 instance Commitment Parser where
     commit (P p)         = P (Committed . squash . p)

@@ -1,5 +1,5 @@
 module Text.Parse
-  ( -- * The Parse class is a replacement for the standard Read class. 
+  ( -- * The Parse class is a replacement for the standard Read class.
     -- $parser
     TextParser	-- synonym for Parser Char, i.e. string input, no state
   , Parse(..)	-- instances: (), (a,b), (a,b,c), Maybe a, Either a, [a],

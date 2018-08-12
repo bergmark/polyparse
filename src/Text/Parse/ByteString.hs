@@ -1,5 +1,5 @@
 module Text.Parse.ByteString
-  ( -- * The Parse class is a replacement for the standard Read class. 
+  ( -- * The Parse class is a replacement for the standard Read class.
     --   This particular instance reads from ByteString rather than String.
     -- $parser
     TextParser	-- synonym for Text.ParserCombinators.Poly.ByteString
